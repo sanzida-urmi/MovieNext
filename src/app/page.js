@@ -15,6 +15,8 @@ import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { AuthContext } from "@/component/AuthProvider/AuthContext";
 import { toast } from "react-toastify";
+import {motion} from 'framer-motion';
+
 
 
 export default function Home() {
@@ -98,7 +100,39 @@ const {loading,setLoading,user} = use(AuthContext);
 
     <p  className="text-4xl pt-10 font-bold text-red-500 mb-4 text-center">Explore movies by your favorite categories</p>
 
-     <div className="flex justify-evenly">
+    <div className='flex flex-col md:flex-row gap-30 mx-auto justify-center items-center'>
+
+  <div className=' wrap-anywhere ani'>
+  <motion.img
+   transition={{
+    repeat: Infinity,
+    duration: 2,
+    ease: "linear",
+  }}
+      
+   animate={{scale: [1,2,1], rotate:360, x: [0,100,-100,0]}}  className='h-10 sm:h-20' src="/starr.png" alt="" />
+</div>
+
+
+
+  <div>
+     
+    <ul className='wrap-anywhere'>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Action</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Adventure</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Comedy</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Drama</li>
+  </ul>
+  <ul className='wrap-anywhere'>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Fantasy</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Horror</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Romance</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Thriller</li>
+</ul></div>
+</div>
+
+
+     {/* <div className="flex justify-evenly">
     
       <ul className='wrap-anywhere '>
   <li className='flex items-center gap-2'><PiStarDuotone /> Action</li>
@@ -111,7 +145,7 @@ const {loading,setLoading,user} = use(AuthContext);
   <li className='flex items-center gap-2'><PiStarDuotone /> Horror</li>
   <li className='flex items-center gap-2'><PiStarDuotone /> Romance</li>
   <li className='flex items-center gap-2'><PiStarDuotone /> Thriller</li>
-</ul></div>
+</ul></div> */}
 
 
  <div className="text-center p-10">
