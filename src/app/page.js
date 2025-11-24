@@ -1,65 +1,128 @@
+'use client'
 import Image from "next/image";
+import { PiStarDuotone } from "react-icons/pi";
+import localData from '@/Data/data.json'; 
+// import cmnt from '@/Data/cmnt.json'; 
+import { Swiper, SwiperSlide } from "swiper/react";
+import {Pagination,Autoplay,Navigation} from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/autoplay";
+import Reviews from "@/component/Reviews";
+import MovieCard from "@/component/MovieCard";
+import Link from "next/link";
+import { use, useEffect, useState } from "react";
+import { AuthContext } from "@/component/AuthProvider/AuthContext";
+import { toast } from "react-toastify";
+
 
 export default function Home() {
+const {loading,setLoading,user} = use(AuthContext);
+   const [data, setData] = useState([])
+
+
+
+
+   
+         
+  
+  
+          useEffect(()=>{
+             setLoading(true);
+         fetch("http://localhost:4000/movies")
+         .then(res=>res.json())
+         .then(data =>{
+          //  console.log(data)
+           setData(data)
+           setLoading(false);
+           toast.success("Show all movie");
+         })
+         .catch(err =>{
+          //  console.log(err);
+           toast.error("could not show all movie")
+         })
+           },[])
+
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="">
+      <div className="flex justify-center mb-20">
+      
+        <Swiper
+        key={localData.length}
+        modules={[Navigation, Pagination, Autoplay]}
+        spaceBetween={30}
+        slidesPerView={1}
+        navigation
+        pagination={{ clickable: true }}
+        loop={true}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        className="h-96 w-2/3 rounded-lg"
+      >
+        {localData.map((movie) => (
+          <SwiperSlide
+            key={movie._id}
+            className="flex justify-center items-center h-full"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <img 
+              src={movie.posterUrl}
+              alt={movie.title}
+              className="h-full w-full object-cover rounded-lg shadow-lg"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+       
+  <div>
+      <h1 className="text-4xl font-bold text-red-500 mb-4 text-center">Discover Your Next Favorite Movie</h1>
+    <p className="text-center p-10">Explore thousands of films, create watchlists, and share your cinematic journey with friends. MovieMaster Pro is a smart movie management system that lets users easily browse, filter, and organize their favorite movies. You can explore films by genre, rating and even create your own personal collections and watchlist.It is a complete movie management web application.</p>
+  </div>
+
+
+             {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
+         {recentmovie.map(movie => <MovieCard key={movie._id} movie={movie}/>)}
+
+      </div> */}
+
+
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
+         {data.map(movie => <MovieCard key={movie._id} movie={movie}/>)}
+
+      </div>
+
+
+    <p  className="text-4xl pt-10 font-bold text-red-500 mb-4 text-center">Explore movies by your favorite categories</p>
+
+     <div className="flex justify-evenly">
+    
+      <ul className='wrap-anywhere '>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Action</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Adventure</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Comedy</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Drama</li>
+  </ul>
+  <ul className='wrap-anywhere'>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Fantasy</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Horror</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Romance</li>
+  <li className='flex items-center gap-2'><PiStarDuotone /> Thriller</li>
+</ul></div>
+
+
+ <div className="text-center p-10">
+  <Link href='/movies' className="btn btn-error">Explore All Movies</Link>
+
+ </div>
+
+
+     <Reviews></Reviews>
+     {/* <Reviews cmnt={cmnt}></Reviews> */}
+
     </div>
   );
 }
