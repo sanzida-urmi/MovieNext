@@ -1,6 +1,5 @@
 "use client";
 import { AuthContext } from "@/component/AuthProvider/AuthContext";
-// import { useSession, signIn, signOut } from "next-auth/react"
 
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -9,17 +8,6 @@ import { IoEyeOff } from "react-icons/io5";
 import Link from "next/link";
 import { toast } from "react-toastify";
 
-// const Login=()=>{
-//   const session = useSession();
-//   console.log(session);
-//   return (
-//     <div>
-//       <button onClick={()=>signIn("google")}>Login with google</button>
-//     </div>
-//   )
-// }
-
-// export default Login;
 
 function page() {
   const { signInWithGoogle, signInUser, setLoading, setUser } =
@@ -33,30 +21,10 @@ function page() {
     setLoading(true);
     signInWithGoogle()
       .then((result) => {
-        // console.log(result.user);
         setUser(result.user);
         setLoading(false)
 
           toast.success("Login successful");
-
-          //  const newUser ={
-          //       name: result.user.displayName,
-          //       email: result.user.email,
-          //       image: result.user.photoURL
-          //     }
-
-          //     fetch('https://moviemasterserver.vercel.app/users',{
-          //       method: 'POST',
-          //       headers: {
-          //         'content-type' : 'application/json'
-          //       },
-          //       body: JSON.stringify(newUser)
-          //     })
-
-          // .then((res) => res.json())
-          // .then((data) => {
-            // console.log('data after user save', data)
-          // });
 
         router.push("/");
       })
@@ -64,7 +32,7 @@ function page() {
         setLoading(false);
         const errmsg = error.message;
       toast(errmsg)
-        // console.log(error);
+        console.log(error);
       });
   };
 
@@ -120,10 +88,7 @@ setLoading(false)
   return (
     <div className="flex break-all justify-center items-center  min-h-screen">
       <div className="flex flex-col md:flex-row gap-5 wrap-anywhere">
-        {/* <div>
-          <img className="h-100 w-100" src={loginImg} alt="" />
-        </div> */}
-
+       
         <div className="card bg-red-300 w-full max-w-sm shrink-0 shadow-2xl wrap-anywhere">
           <div className="card-body text-orange-600">
             <h1 className="text-red-700 text-2xl font-semibold">
@@ -134,7 +99,6 @@ setLoading(false)
                 <label className="label text-orange-800">Email</label>
                 <input
                   type="email"
-                  // ref={refEmail}
                   name="email"
                   className="input"
                   placeholder="Email"
@@ -161,13 +125,6 @@ setLoading(false)
                     {see ? <FaEye /> : <IoEyeOff />}
                   </span>
                 </div>
-
-                {/* <button
-                  className="hover:underline cursor-pointer mt-2"
-                  type="button"
-                >
-                  Forget password?
-                </button> */}
 
                 <button type="submit" className="btn  mt-2 btn-error">
                   Login

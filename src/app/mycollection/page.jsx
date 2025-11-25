@@ -1,17 +1,18 @@
-"use client"
+"use client";
 
 import { AuthContext } from "@/component/AuthProvider/AuthContext";
-import MycollectionList from "@/component/MycollectionList";
+import PrivateRoute from "@/component/PrivateRoute";
+import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { ClimbingBoxLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 function page() {
   const { user, refetch, setRefecth } = use(AuthContext);
   const [collection, setCollection] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // console.log(user);
 
   useEffect(() => {
     setLoading(true);
@@ -20,7 +21,7 @@ function page() {
       return;
     }
 
-    fetch(`http://localhost:4000/mycollection?email=${user.email}`)
+    fetch(`https://movie-next-server.vercel.app/mycollection?email=${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setCollection(data);
@@ -44,14 +45,118 @@ function page() {
       </div>
     );
   }
+
+  if (collection.length === 0) {
+    return (
+      <PrivateRoute>
+      <div className="text-red-300">
+        <p className="text-red-400 wrap-anywhere  font-bold text-center text-5xl">
+          No Movie in Your Collection
+        </p>
+      </div>
+      </PrivateRoute>
+    );
+  }
+
+  const handleDlete = (_id) => {
+  
+        Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+           
+      
+          
+          fetch(`https://movie-next-server.vercel.app/movies/${_id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then(res => res.json())
+          .then(data=> {
+            // console.log(data)
+            setRefecth(!refetch)
+            // navigate('/movies')
+      
+               Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          });
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      
+      
+       
+        }
+      });
+  
+       }
+
   return (
-    <div>
+    <PrivateRoute>
+    
 
-             <div className="grid grid-row gap-5 mt-10">
- {collection.map(movie => <MycollectionList key={movie._id} movie={movie}/>)}
+      <div className="overflow-x-auto">
+  <table className="table">
+    {/* head */}
+    <thead>
+      <tr>
+       
+        <th>Movie Name</th>
+        <th>genre</th>
+        <th>Action</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {/* row 1 */}
 
+     {
+      collection.map((movie)=>(
+         <tr>
+       
+        <td>
+          <div className="flex items-center gap-3">
+            <div className="avatar">
+              <div className="mask mask-squircle h-12 w-12">
+                <img
+                  src={movie.posterUrl} />
+              </div>
+            </div>
+            <div>
+              <div className="font-bold">{movie.title}</div>
+              <div className="text-sm opacity-50">{movie.rating}</div>
+            </div>
           </div>
-    </div>
+        </td>
+        <td>
+         {movie.genre}
+        </td>
+        <td>
+          <button onClick={()=>handleDlete(movie._id)} className="btn btn-error">Delete</button>
+        </td>
+        <th>
+         <Link href={`/movies/${movie._id}`} className="btn btn-active  btn-error">View</Link>
+        </th>
+      </tr>
+      ))
+     }
+     
+    </tbody>
+   
+  </table>
+</div>
+    </PrivateRoute>
   );
 }
 

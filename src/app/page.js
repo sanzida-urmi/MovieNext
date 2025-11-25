@@ -1,8 +1,6 @@
 'use client'
 import Image from "next/image";
 import { PiStarDuotone } from "react-icons/pi";
-import localData from '@/Data/data.json'; 
-// import cmnt from '@/Data/cmnt.json'; 
 import { Swiper, SwiperSlide } from "swiper/react";
 import {Pagination,Autoplay,Navigation} from "swiper/modules";
 import "swiper/css";
@@ -16,43 +14,65 @@ import { use, useEffect, useState } from "react";
 import { AuthContext } from "@/component/AuthProvider/AuthContext";
 import { toast } from "react-toastify";
 import {motion} from 'framer-motion';
+import { ClimbingBoxLoader } from "react-spinners";
 
 
 
 export default function Home() {
-const {loading,setLoading,user} = use(AuthContext);
+const {user} = use(AuthContext);
    const [data, setData] = useState([])
+   const [hdata, setHdata] = useState([])
+       const [loading, setLoading] = useState(false);
 
 
+        useEffect(()=>{
+             setLoading(true);
+         fetch("https://movie-next-server.vercel.app/few")
+         .then(res=>res.json())
+         .then(data =>{
+           setHdata(data)
+           setLoading(false);
+          //  toast.success("Show all movie");
+         })
+         .catch(err =>{
+          console.log(err);
+          //  toast.error("could not show all movie")
+            setLoading(false);
+         })
+           },[])
 
 
-   
-         
-  
   
           useEffect(()=>{
              setLoading(true);
-         fetch("http://localhost:4000/movies")
+         fetch("https://movie-next-server.vercel.app/movies")
          .then(res=>res.json())
          .then(data =>{
-          //  console.log(data)
            setData(data)
            setLoading(false);
            toast.success("Show all movie");
          })
          .catch(err =>{
-          //  console.log(err);
            toast.error("could not show all movie")
+            setLoading(false);
          })
            },[])
 
+
+            if (loading) {
+    return (
+      <div>
+        <ClimbingBoxLoader className="text-center mx-auto" color="#db6a69" />
+      </div>
+    );
+  }
 
   return (
     <div className="">
       <div className="flex justify-center mb-20">
       
         <Swiper
-        key={localData.length}
+        key={data.length}
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}
         slidesPerView={1}
@@ -65,7 +85,7 @@ const {loading,setLoading,user} = use(AuthContext);
         }}
         className="h-96 w-2/3 rounded-lg"
       >
-        {localData.map((movie) => (
+        {data.map((movie) => (
           <SwiperSlide
             key={movie._id}
             className="flex justify-center items-center h-full"
@@ -81,24 +101,17 @@ const {loading,setLoading,user} = use(AuthContext);
     </div>
        
   <div>
-      <h1 className="text-4xl font-bold text-red-500 mb-4 text-center">Discover Your Next Favorite Movie</h1>
-    <p className="text-center p-10">Explore thousands of films, create watchlists, and share your cinematic journey with friends. MovieMaster Pro is a smart movie management system that lets users easily browse, filter, and organize their favorite movies. You can explore films by genre, rating and even create your own personal collections and watchlist.It is a complete movie management web application.</p>
+      <h1 className="text-4xl wrap-anywhere font-bold text-red-400 mb-4 text-center">Discover Your Next Favorite Movie</h1>
+    <p className="text-center wrap-anywhere  p-10">Explore thousands of films, create watchlists, and share your cinematic journey with friends. MovieMaster Pro is a smart movie management system that lets users easily browse, filter, and organize their favorite movies. You can explore films by genre, rating and even create your own personal collections and watchlist.It is a complete movie management web application.</p>
   </div>
 
-
-             {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
-         {recentmovie.map(movie => <MovieCard key={movie._id} movie={movie}/>)}
-
-      </div> */}
-
-
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
-         {data.map(movie => <MovieCard key={movie._id} movie={movie}/>)}
+         {hdata.map(movie => <MovieCard key={movie._id} movie={movie}/>)}
 
       </div>
 
 
-    <p  className="text-4xl pt-10 font-bold text-red-500 mb-4 text-center">Explore movies by your favorite categories</p>
+    <p  className="text-4xl wrap-anywhere  pt-10 font-bold text-red-300 mb-4 text-center">Explore movies by your favorite categories</p>
 
     <div className='flex flex-col md:flex-row gap-30 mx-auto justify-center items-center'>
 
@@ -131,31 +144,13 @@ const {loading,setLoading,user} = use(AuthContext);
 </ul></div>
 </div>
 
-
-     {/* <div className="flex justify-evenly">
-    
-      <ul className='wrap-anywhere '>
-  <li className='flex items-center gap-2'><PiStarDuotone /> Action</li>
-  <li className='flex items-center gap-2'><PiStarDuotone /> Adventure</li>
-  <li className='flex items-center gap-2'><PiStarDuotone /> Comedy</li>
-  <li className='flex items-center gap-2'><PiStarDuotone /> Drama</li>
-  </ul>
-  <ul className='wrap-anywhere'>
-  <li className='flex items-center gap-2'><PiStarDuotone /> Fantasy</li>
-  <li className='flex items-center gap-2'><PiStarDuotone /> Horror</li>
-  <li className='flex items-center gap-2'><PiStarDuotone /> Romance</li>
-  <li className='flex items-center gap-2'><PiStarDuotone /> Thriller</li>
-</ul></div> */}
-
-
- <div className="text-center p-10">
+ <div className="text-center wrap-anywhere  p-10">
   <Link href='/movies' className="btn btn-error">Explore All Movies</Link>
 
  </div>
 
 
      <Reviews></Reviews>
-     {/* <Reviews cmnt={cmnt}></Reviews> */}
 
     </div>
   );

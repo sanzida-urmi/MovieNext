@@ -10,13 +10,6 @@ function page() {
      const {user} = use(AuthContext);
     const [loading, setLoading] = useState(false);
 
-      if(loading){
-    return (
-      <div className='wrap-anywhere'>
-        <ClimbingBoxLoader className="text-center mx-auto" color="#db6a69" />
-      </div>
-    )
-  }
 
       const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,7 +32,7 @@ function page() {
     }
     // console.log(formData);
 
-    fetch('http://localhost:4000/movies', {
+    fetch('https://movie-next-server.vercel.app/movies', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,16 +52,25 @@ function page() {
    
 
   }
+
+  
+      if(loading){
+    return (
+      <div className='wrap-anywhere'>
+        <ClimbingBoxLoader className="text-center mx-auto" color="#db6a69" />
+      </div>
+    )
+  }
   return (
     <PrivateRoute>
     <div>
       <div className="card border mt-10 border-gray-200 bg-base-100 w-full max-w-md mx-auto shadow-2xl rounded-2xl wrap-anywhere">
       <div className="card-body p-6 relative">
-        <h2 className="text-2xl font-bold text-center mb-6">Add New Movie</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 text-red-400">Add New Movie</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* title Field */}
           <div>
-            <label className="label font-medium">Title</label>
+            <label className="label wrap-anywhere font-medium ">Title</label>
             <input
               type="text"
               name="title"
@@ -91,7 +93,7 @@ function page() {
           </div>
           {/* releaseYear Field */}
           <div>
-            <label className="label font-medium">ReleaseYear</label>
+            <label className="label font-medium ">Release Year</label>
             <input
               type="number"
               name="releaseYear"

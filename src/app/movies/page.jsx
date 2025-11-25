@@ -1,27 +1,19 @@
 "use client"
 import React,{use, useEffect, useState} from 'react'
-// import { Link, NavLink, useLoaderData, useLocation, useNavigate } from 'react-router'
-// import MovieCard from '../components/MovieCard'
-// import { AuthContext } from '../context/AuthContext';
+
 import { toast } from 'react-toastify';
 import { ClimbingBoxLoader } from 'react-spinners';
-// import { Navigate } from 'react-router';
 import { AuthContext } from '@/component/AuthProvider/AuthContext';
-// import localData from '@/Data/data.json'; 
 import MovieCard from '@/component/MovieCard';
-import PrivateRoute from '@/component/PrivateRoute';
-
 
 function AllMovies() {
    
        const {loading,setLoading,user} = use(AuthContext);
          const [data, setData] = useState([])
-       
-
 
         useEffect(()=>{
            setLoading(true);
-       fetch("http://localhost:4000/movies")
+       fetch("https://movie-next-server.vercel.app/movies")
        .then(res=>res.json())
        .then(data =>{
         //  console.log(data)
@@ -47,15 +39,9 @@ function AllMovies() {
   return (
   
 <div>
- 
-  {/* <div className='flex flex-col justify-center items-center sm:flex-row gap-4'>
-    <Link className='btn btn-error wrap-anywhere' to="/genre"> Filter by genre</Link>
-  <Link className='btn btn-error wrap-anywhere' to="/rating">Filter by rating</Link>
 
-  </div> */}
-
-        <div  className="text-4xl pt-10 font-bold text-red-500 mb-4 text-center">Browse All Movies</div>
-        <p className='mb-10'>Discover our vast collection of movies from every genre and era.
+        <div  className="text-4xl pt-10 wrap-anywhere  font-bold text-red-500 mb-4 text-center">Browse All Movies</div>
+        <p className='mb-10 wrap-anywhere '>Discover our vast collection of movies from every genre and era.
 Browse through thousands of films including classics and new releases.
 Use advanced filters to find movies by genre, year, or rating.
 Save your favorites to personal watchlists for later viewing.
@@ -82,11 +68,6 @@ Start exploring now and find your next cinematic adventure!</p>
          {data.map(movie => <MovieCard key={movie._id} movie={movie}/>)}
 
       </div>
-
-             {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
-         {data.map(movie => <MovieCard key={movie._id} movie={movie}/>)}
-
-      </div> */}
 
     </div>
 

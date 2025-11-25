@@ -2,8 +2,8 @@
 import Link from "next/link"
 import { use } from "react";
 import { AuthContext } from "./AuthProvider/AuthContext";
-// import { AuthContext } from "./AuthProvider/AuthContext";
 import { DotLoader, HashLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
  
 
@@ -15,46 +15,39 @@ function Navbar() {
      const links = <>
     <li className='font-semibold'><Link   href ="/">Home</Link></li>
      <li className='font-semibold'><Link href ="/movies" 
-    //   className={({isActive})=> isActive ? "active" : ""}
        >All Movies</Link></li>
  
        
       
         <li className='font-semibold'><Link
-        //  className={({isActive})=> isActive ? "active" : ""} 
           href ="/mycollection">My Collections</Link></li>
 
         <li className='font-semibold'><Link
-        //  className={({isActive})=> isActive ? "active" : ""} 
           href ="/addmovie" >Add Movie</Link></li>
 
         <li className='font-semibold'><Link 
-        // className={({isActive})=> isActive ? "active" : ""}
           href ="/login" >Login</Link></li>
 
      </>
 
            const signouthandle = () => {
 
-        console.log("k")
         setLoading(true);
     signOutUser()
       .then(() => {
         setLoading(false);
-        // toast.success("successfully signout");
         setUser(null);
-        // navigate("/");
+        toast.success('Logout successfully')
       })
       .catch((e) => {
-        // toast.error(e.message);
         console.log(e.message);
+        toast.success("couldn't logout")
       });
 
   };
 
-
   return (
-    <div  className="navbar shadow-sm   bg-base-300 rounded-2xl mt-0 mb-10 flex flex-col md:flex-row items-start gap-3 md:items-stretch">
+    <div  className="navbar shadow-sm sticky top-0 z-50   bg-base-300 rounded-2xl mt-0 mb-10 flex flex-col md:flex-row items-start gap-3 md:items-stretch">
 
        <div className="navbar-start nav  flex flex-col  sm:flex-row justify-start items-start">
     <div className="dropdown">
@@ -94,11 +87,11 @@ function Navbar() {
         
                  (
                   <div className='flex flex-col gap-3 sm:flex-row justify-start items-start'>
-            <div className='dropdown drawer-end z-50 '>
+            <div className='dropdown dropdown-start md:dropdown-end  '>
 
 
                        <div tabIndex={0} role="button" className='btn btn-ghost btn-circle avatar'>
-              <div className='w-9 border-2 border-red-300 rounded-full'>
+              <div className='w-9  border-2 border-red-300 rounded-full'>
                 <img referrerPolicy='no-referrer' src={user?.photoURL || "https://via.placeholder.com/88"} alt="" />
 
               </div>

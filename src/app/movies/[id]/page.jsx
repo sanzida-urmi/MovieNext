@@ -10,7 +10,7 @@ async function page({params}) {
 
     const {id} = await params;
     
-   const res = await fetch(`http://localhost:4000/movies/${id}`);
+   const res = await fetch(`https://movie-next-server.vercel.app/movies/${id}`);
   const data = await res.json();
   const movie = data.result;
 

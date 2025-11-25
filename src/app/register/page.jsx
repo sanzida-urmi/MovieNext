@@ -1,31 +1,18 @@
 "use client";
 
 import React, { use, useContext, useEffect, useState } from "react";
-// import { Link, useLocation, useNavigate } from "react-router";
-// import regimg from "../assets/reg.png";
-
-
 import { FaEye } from "react-icons/fa";
 import { IoEyeOff } from "react-icons/io5";
-// import { AuthContext } from "../context/AuthContext";
 import Link from "next/link";
 import { AuthContext } from "@/component/AuthProvider/AuthContext";
-// import { toast } from "react-toastify";
 import { updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
-// import { useRouter } from "next/router";
 import { useRouter } from "next/navigation";
 
 function Register() {
   const { signInWithGoogle,setLoading,createUser,setUser,setTotaluser,totaluser } = use(AuthContext);
   const [see, setSee] = useState(false);
   const router = useRouter();
- 
-    // const navigate = useNavigate();
-    // const location = useLocation();
-    // console.log(location.state?.from)
-
-
 
   const handleGoogle=()=>{
     setLoading(true);
@@ -34,27 +21,6 @@ function Register() {
         console.log(result.user);
         setUser(result.user)
 
-        
-            // const newUser ={
-            //   name: result.user.displayName,
-            //   email: result.user.email,
-            //   image: result.user.photoURL
-            // }
-
-            // fetch('https://moviemasterserver.vercel.app/users',{
-            //   method: 'POST',
-            //   headers: {
-            //     'content-type' : 'application/json'
-            //   },
-            //   body: JSON.stringify(newUser)
-            // })
-
-            // .then(res => res.json())
-            // .then(data => {
-            //   console.log('data after user save', data)
-            // })
-
-
              setLoading(false)
         toast.success("Registration successful");
         
@@ -62,7 +28,6 @@ function Register() {
 
         })
         .catch(err => {
-            // console.log(err);
              toast.error(err.message);
         })
 
@@ -102,34 +67,12 @@ function Register() {
           setUser({ ...user, displayName: name, photoURL: photo });
           console.log(user);
 
-
-        //    const newUser ={
-        //       name: user.displayName,
-        //       email: user.email,
-        //       image: user.photoURL
-        //     }
-
-        //     fetch('https://moviemasterserver.vercel.app/users',{
-        //       method: 'POST',
-        //       headers: {
-        //         'content-type' : 'application/json'
-        //       },
-        //       body: JSON.stringify(newUser)
-        //     })
-            
-        //     .then(res => res.json())
-        //     .then(data => {
-        //       // console.log('data after user save', data)
-        //     })
-
-//  navigate(location.state?.from ||"/");
  toast.success("successfully login")
  router.push("/");
 
         })
         .catch((e) => {
           setLoading(false)
-        //   console.log(e);
           toast.error(e.message);
         });
 
@@ -146,9 +89,7 @@ function Register() {
     
 
       <div className="flex flex-col md:flex-row gap-15 rap-anywhere">
-        {/* <div>
-          <img className="h-100 w-120" src={regimg} alt="" />
-        </div> */}
+       
 
         <div className="card bg-red-300 w-full max-w-sm shrink-0 shadow-2xl rap-anywhere">
         <div className="card-body text-orange-600">
